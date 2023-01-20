@@ -26,7 +26,8 @@ class files
         $this->setResultadoArquivos();
         $this->limparArquivos(self::dirDownloads);
     }
-    private function verificarDiretorio(){
+    private function verificarDiretorio()
+    {
         if (!file_exists(self::dirDownloads))
             mkdir(self::dirDownloads);
         if (!file_exists(self::dirProdutos))
@@ -96,23 +97,25 @@ class files
         array_pop($this->arquivos);
     }
 
-    public function getResultFiles():array{
+    public function getResultFiles(): array
+    {
         $keys = array_keys((array) $this->resultFiles[0]);
         $listProdutos = [];
-   
-   
-        foreach($this->resultFiles as $result){
-            $produto = new Produto();      
-            foreach($keys as $key){ 
-                if(property_exists($produto, $key))             
-                $produto->{$key} = $result->{$key};   
 
-            }    
-            $listProdutos[] = $produto;             
+
+        foreach ($this->resultFiles as $result) {
+            $produto = new Produto();
+            foreach ($keys as $key) {
+                if (property_exists($produto, $key))
+                    $produto->{$key} = $result->{$key};
+
+            }
+            $listProdutos[] = $produto;
         }
+
         database::insertProduto($listProdutos[1]);
         //var_export($listProdutos[0]);
         exit;
         return $this->resultFiles;
-            }
+    }
 }
