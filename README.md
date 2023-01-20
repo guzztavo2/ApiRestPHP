@@ -33,8 +33,8 @@ Pronto, já poderá rodar o projeto 😉
 
 
 ## O que foi feito até agora?
-- ### ✅ Modelo feita encima de um modelo JSON (de forma automática);
-- ### ✅ Tabela do banco de dados foi desenvolvida encima da Model;
-- ### ✅ Determinei uma classe chamada 'Files', para baixar os arquivos do link1 e do link2, e extrai-los, acoplar no Modelo determinado (com as propriedades determinadas), salva no banco de dados e já deleta todos os arquivos inutilizados. 
-- ### ✅ Roteamento (GET, PUT E DELETE). 
-- ### ❎ Ainda não foi desenvolvido as views para o projeto.
+- ✅ Modelo feita encima de um modelo JSON (de forma automática);
+- ✅ Tabela do banco de dados foi desenvolvida encima da Model;
+- ✅ Determinei uma classe chamada 'Files', para baixar os arquivos do link1 e do link2, e extrai-los, acoplar no Modelo determinado (com as propriedades determinadas), salva no banco de dados e já deleta todos os arquivos inutilizados. 
+- ✅ Roteamento (GET, PUT E DELETE). 
+- ❎ Ainda não foi desenvolvido as views para o projeto.
