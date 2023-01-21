@@ -26,10 +26,11 @@ Depois disso, foi proporcionado um JSON para ser utilizado como MODELO desses ar
 - GET [/Produto] - Mostrará todos os produtos instalados no banco de dados.
 
 
+
 ## O que é necessário para rodar o projeto?
 - ### Editar o arquivo na raiz: 'config.php', e alterar apenas o nome do banco de dados, diretórios e etc.
 Pronto, já poderá rodar o projeto 😉
-
+Também é necessário ter instalado um servidor local com PHP e o banco de dados MySQL. (Xampp por exemplo);
 
 
 ## O que foi feito até agora?

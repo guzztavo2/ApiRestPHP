@@ -1,4 +1,6 @@
 <?php
+namespace classe;
+
 use model\produto;
 
 class files
@@ -8,7 +10,7 @@ class files
 
     const dirDownloads = './arquivos/';
     const dirProdutos = self::dirDownloads . 'produtos/';
-    private $arquivos = [];
+    public $arquivos = [];
 
 
     private array $resultFiles;
@@ -24,7 +26,8 @@ class files
         $this->downloadArquivos($archive);
         $this->extractFileGz();
         $this->setResultadoArquivos();
-        $this->limparArquivos(self::dirDownloads);
+        //$this->limparArquivos(self::dirDownloads);
+        $this->getResultFiles();
     }
     private function verificarDiretorio()
     {
@@ -70,9 +73,9 @@ class files
         if (!file_exists($this->arquivos)) {
             $arquivo = gzopen($file_name, 'rb');
             $arquivoSaida = fopen($arquivoSaida_Nome, 'wb');
-            while (!gzeof($arquivo)) {
+            while (!gzeof($arquivo))
                 fwrite($arquivoSaida, gzread($arquivo, $buffer_size));
-            }
+
             fclose($arquivoSaida);
             gzclose($arquivo);
             rename($arquivoSaida_Nome, $this->arquivos);
@@ -97,7 +100,7 @@ class files
         array_pop($this->arquivos);
     }
 
-    public function getResultFiles(): array
+    public function getResultFiles()
     {
         $keys = array_keys((array) $this->resultFiles[0]);
         $listProdutos = [];
@@ -106,16 +109,21 @@ class files
         foreach ($this->resultFiles as $result) {
             $produto = new Produto();
             foreach ($keys as $key) {
-                if (property_exists($produto, $key))
+                if (property_exists($produto, $key)) {
+                    if ($key == 'code')
+                        $result->{$key} = str_replace('"', '', $result->{$key});
                     $produto->{$key} = $result->{$key};
+
+                }
 
             }
             $listProdutos[] = $produto;
         }
 
-        database::insertProduto($listProdutos[1]);
+        foreach ($listProdutos as $produto)
+            database::insertProduto($produto);
+
+
         //var_export($listProdutos[0]);
-        exit;
-        return $this->resultFiles;
     }
 }

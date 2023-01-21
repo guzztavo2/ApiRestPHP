@@ -1,7 +1,9 @@
 <?php
-require_once('./model/produto.php');
+namespace classe;
 use model\produto as Produto;
 use model\status as Status;
+
+
 class database
 {
     static $pdo;
@@ -26,7 +28,7 @@ class database
         $keys = implode(',', $keys);
 
         $produto->setStatus(Status::DRAFT);
-        $produto->imported_t = date('now');
+        $produto->imported_t = date('Y-m-d H:i:s');
         $sql = 'INSERT INTO `' . Produto::TABLE . '` (' . $keys . ') VALUES (' . $bind . ')';
         
         $pdo = self::conectar()->prepare($sql);
@@ -39,7 +41,26 @@ class database
      
         $pdo->execute();
     }
+    
+    public static function selectAll(string $tableName):array{
+        $pdo = database::conectar()->prepare('SELECT * FROM `' . $tableName . '`');
+        $pdo->execute();
+        $pdo->setFetchMode(PDO::FETCH_ASSOC);
 
+        return $pdo->fetchAll();
+    }
+    public static function find($tableName, array $options){
+        $pdo = database::conectar()->prepare('SELECT * FROM `' . $tableName . '` ' . $options[0]);
+        $pdo->execute($options[1]);
+        $pdo->setFetchMode(PDO::FETCH_ASSOC);
+        return $pdo->fetchAll();
+
+    }
+    public static function salvar($tablename,array $keys_values, array $where  ){
+
+        $pdo = database::conectar()->prepare('UPDATE `' . $tablename . '` SET '.$keys_values[0].' WHERE '.$where[0]);     
+        $pdo->execute(array_merge($keys_values[1], [$where[1]]));
+    }
     public static function verificarCriarTabelas()
     {
 
@@ -50,9 +71,6 @@ class database
         $queryItens = '';
         foreach ($produtoModel as $item) {
             switch ($item) {
-                case 'code':
-                    $queryItens .= $item . ' bigint not null,';
-                    break;
                 case 'created_t':
                     $queryItens .= $item . ' datetime not null,';
                     break;

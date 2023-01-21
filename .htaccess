@@ -2,9 +2,9 @@ Options -Indexes
     RewriteEngine On
     RewriteCond %{SCRIPT_FILENAME} !-f
     RewriteCond %{SCRIPT_FILENAME} !-d
-    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+    RewriteRule ^(.*)$ index.php [NC,L]
     SetEnvIf Referer http://localhost/Projeto/ localreferer
-    <FilesMatch \.(jpg|jpeg|png|gif|css)$>
+    <FilesMatch \.(jpg|jpeg|png|gif|css|json|gz)$>
     Order deny,allow
     Deny from all
     Allow from env=localreferer

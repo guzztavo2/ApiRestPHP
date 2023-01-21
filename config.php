@@ -9,10 +9,10 @@ if(!defined('HOME'))
     define('URL', 'http://localhost/');
 
 spl_autoload_register(function ($className) {
-    if (file_exists('class/' . $className . '.php'))
-        require_once('class/' . $className . '.php');
-    else if (file_exists('controller/' . $className . '.php'))
-        require_once('controller/' . $className . '.php');
+    $className = explode("\\", $className);
+ 
+    if (file_exists($className[0].'/' . $className[1] . '.php'))
+        require_once($className[0].'/' . $className[1] . '.php');
 
 });
 
@@ -28,15 +28,6 @@ if (!defined('DATABASE'))
         'PASSWORD' => '',
         'DATABASE' => 'produtosAlimenticios'
     ));
-
-
-//  TABELA DE INFORMACOES
-if (!defined('TABELA_DATABASE'))
-    define('TABELA_DATABASE', array(
-        'TABELA_1' => 'TabelaDeAlimentos' 
-
-    ));
-
 
 // URL
 if (!defined('HOME_URL'))
@@ -61,9 +52,9 @@ function reescreverHTACCESS()
     RewriteEngine On
     RewriteCond %{SCRIPT_FILENAME} !-f
     RewriteCond %{SCRIPT_FILENAME} !-d
-    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+    RewriteRule ^(.*)$ index.php [NC,L]
     SetEnvIf Referer ".HOME_URL." localreferer
-    <FilesMatch \.(jpg|jpeg|png|gif|css)$>
+    <FilesMatch \.(jpg|jpeg|png|gif|css|json|gz)$>
     Order deny,allow
     Deny from all
     Allow from env=localreferer
