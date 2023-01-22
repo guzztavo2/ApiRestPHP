@@ -1,7 +1,7 @@
 <?php
 
 namespace model;
-use database;
+use classe\database;
 
 abstract class status {
     const DRAFT = 'draft'; const TRASH = 'trash'; const PUBLISHED = 'published';

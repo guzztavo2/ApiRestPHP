@@ -3,17 +3,28 @@ require_once('./config.php');
 use model\produto as Produto;
 use model\status as Status;
 
+use classe\database;
 use controller\ProdutoController;
 
 
+$error = [];
+try {
+    database::verificarCriarTabelas();
+} catch (Exception $e) {
+    echo $e->getMessage();
+    $error = [$e->getMessage()];
+}
 
-new ProdutoController();
+if(count($error) > 0)
+new ProdutoController($error);
+else
+    new ProdutoController();
 
 
 // try{
 // database::verificarCriarTabelas();
 // }catch(Exception $e){
-    
+
 //     echo ($e->getMessage());
 // }
 // $a = new files();
