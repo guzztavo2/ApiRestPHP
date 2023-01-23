@@ -1,6 +1,7 @@
 <?php
 namespace classe;
 
+use FFI\Exception;
 use model\produto;
 
 class files
@@ -8,7 +9,7 @@ class files
     const filesTxt = 'https://challenges.coode.sh/food/data/json/index.txt';
     const urlToDownloadFiles = 'https://challenges.coode.sh/food/data/json/';
 
-    const dirDownloads = './arquivos/';
+    const dirDownloads = 'arquivos/';
     const dirProdutos = self::dirDownloads . 'produtos/';
     public $arquivos = [];
 
@@ -20,15 +21,37 @@ class files
         $this->setArquivosFromUrl();
 
     }
-    public function execute(int $archive)
+    private function setArquivosFromUrl()
     {
-        $this->verificarDiretorio();
-        $this->downloadArquivos($archive);
-        $this->extractFileGz();
-        $this->setResultadoArquivos();
-        //$this->limparArquivos(self::dirDownloads);
-        $this->getResultFiles();
+
+        $this->arquivos = explode("\n", @file_get_contents(self::filesTxt));
+        $error = error_get_last();
+        if (isset($error))
+            throw new \Exception('Falha ao se conectar com o servidor "challenges.coode".');
+
+        array_pop($this->arquivos);
+
     }
+    public function execute()
+    {
+
+        $arquivosList = $this->arquivos;
+
+        for ($n = 0; $n < count($arquivosList); $n++) {
+            $this->arquivos = $arquivosList;
+            try {
+                $this->verificarDiretorio();
+                $this->downloadArquivos($n);
+                $this->extractFileGz();
+                $this->setResultadoArquivos();
+                $this->getResultFiles();
+            } catch (\Exception $e) {
+                break;
+            }
+        }
+        $this->limparArquivos(self::dirDownloads);
+    }
+
     private function verificarDiretorio()
     {
         if (!file_exists(self::dirDownloads))
@@ -56,7 +79,7 @@ class files
         $this->arquivos = (string) $this->arquivos[$archive];
         //$file_name = self::dirDownloads.'/'.basename($this->arquivos);
         if (!file_exists(self::dirDownloads . $this->arquivos))
-            file_put_contents(self::dirDownloads . $this->arquivos, file_get_contents(self::urlToDownloadFiles . $this->arquivos));
+            @file_put_contents(self::dirDownloads . $this->arquivos, @file_get_contents(self::urlToDownloadFiles . $this->arquivos));
 
         $this->arquivos = self::dirDownloads . $this->arquivos;
     }
@@ -94,11 +117,7 @@ class files
         }
         $this->resultFiles = $result;
     }
-    private function setArquivosFromUrl()
-    {
-        $this->arquivos = explode("\n", file_get_contents(self::filesTxt));
-        array_pop($this->arquivos);
-    }
+
 
     public function getResultFiles()
     {

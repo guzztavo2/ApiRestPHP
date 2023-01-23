@@ -2,24 +2,23 @@
 namespace classe;
 
 use controller\ProdutoController as ProdutoController;
+use model\app;
+use model\CRON;
 
 class routes
 {
     private static $url;
     const HOME_URL = HOME_URL;
-    const ROTAS = ['/', 'Produtos'];
+    const ROTAS = ['/', 'Produtos','CronUpdateWindowsTask'];
     const REQUESTS = ['GET', 'PUT', 'DELETE'];
 
     private $requestMethod;
     public function __construct()
     {
-      
         $this->validarMethodRequest();
         $this->validarCaminho();
-      
-
-
     }
+    
     private function validarCaminho(){
         $url = '';
         if (!isset(self::getLocation()[1]))
@@ -30,7 +29,13 @@ class routes
         switch ($url) {
             case '/':
                 $this->home();
-                return;
+                return;   
+                case 'Produtos':
+                    $this->produtos();
+                    return;
+                case 'CronUpdateWindowsTask':
+                    $this->CronUpdateWindowsTask();
+                    break;         
             case 'css':
                 if(count(self::getLocation())  == 3){
                  
@@ -40,10 +45,6 @@ class routes
 
                         case 'bootstrap':
                             $dir = ProdutoController::assetsDir.'\\css\\bootstrap.min.css';
-                            include($dir);
-                            exit;
-                        case 'bootstrap_map':
-                            $dir = ProdutoController::assetsDir.'\\css\\bootstrap.min.css.map';
                             include($dir);
                             exit;
                         case 'style':
@@ -67,10 +68,6 @@ class routes
                             $dir = ProdutoController::assetsDir.'\\js\\bootstrap.bundle.min.js';
                             include($dir);
                             exit;
-                        case 'bootstrap_map':
-                            $dir = ProdutoController::assetsDir.'\\js\\bootstrap.bundle.min.js.map';
-                            include($dir);
-                            exit;
                         case 'code':
                             $dir = ProdutoController::assetsDir.'\\js\\code.js';
                             include($dir);
@@ -81,22 +78,45 @@ class routes
                 }else
                     self::redirect(self::HOME_URL);   
             break;
-            case 'Produtos':
-                $this->produtos();
-                return;
-            default:
+         
+            default:            
                 self::redirect(HOME_URL);
         }
     }
+
+    private function checkFirstConnectInServer(){
+    
+
+        if(!app::checkExist()){
+            if (!database::verificarErros()) {
+                database::verificarCriarAPPTabela();
+                $app = new app();
+                $app->salvar();
+            }
+
+            ProdutoController::primeiraConexao();
+     
+    }
+    }
+    
     public function home()
     {
+        $this->checkFirstConnectInServer();
         if ($this->requestMethod !== 'GET')
         throw new \UnexpectedValueException('O tipo de método:' . $this->requestMethod . '. Não é valido aqui.');
 
         ProdutoController::home();
     }
+    public function CronUpdateWindowsTask(){
+        $this->checkFirstConnectInServer();
+        $cron = new CRON();
+        $cron->executarCron();
+
+    }
     public function produtos()
     {
+        $this->checkFirstConnectInServer();
+
         $codigoProduto = (isset($_GET['codigo'])) ? filter_input(INPUT_GET, 'codigo', FILTER_VALIDATE_INT) : null;
         switch ($this->requestMethod) {
             case 'GET':

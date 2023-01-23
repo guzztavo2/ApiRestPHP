@@ -4,6 +4,8 @@ namespace classe;
 use DomainException;
 use ErrorException;
 use FFI\Exception;
+use model\app;
+use model\CRON;
 use model\produto as Produto;
 use model\status as Status;
 use PDOException;
@@ -13,7 +15,7 @@ class database
 {
     static $pdo;
     private const HOST = DATABASE['HOST'], USERNAME = DATABASE['USERNAME'], PASSWORD = DATABASE['PASSWORD'], DATABASE = DATABASE['DATABASE'];
-
+    public const MYSQLDateFormat = 'Y-m-d H:i:s';
 
 
     public static function conectar()
@@ -43,7 +45,7 @@ class database
         $keys = implode(',', $keys);
 
         $produto->setStatus(Status::DRAFT);
-        $produto->imported_t = date('Y-m-d H:i:s');
+        //$produto->imported_t = date('Y-m-d H:i:s');
         $sql = 'INSERT INTO `' . Produto::TABLE . '` (' . $keys . ') VALUES (' . $bind . ')';
 
         $pdo = self::conectar()->prepare($sql);
@@ -79,9 +81,43 @@ class database
         $pdo = database::conectar()->prepare('UPDATE `' . $tablename . '` SET ' . $keys_values[0] . ' WHERE ' . $where[0]);
         $pdo->execute(array_merge($keys_values[1], [$where[1]]));
     }
+    public static function truncateTabela($tablename)
+    {
+        $pdo = database::conectar()->prepare('TRUNCATE TABLE `' . $tablename . '`');
+        $pdo->execute();
+    }
     public static function verificarCriarTabelas()
     {
+        self::verificarCriarProdutosTabela();
+        self::verificarCriarCRONTabela();
+    }
+    public static function verificarCriarCRONTabela()
+    {
+        $query = 'CREATE TABLE IF NOT EXISTS `' . CRON::$tableName . '` (
+            ultimaExecucao datetime not null,
+            UsoMemoria varchar(100) not null
+        )';
+        $pdo = self::conectar()->prepare($query);
+        $pdo->execute();
+    }
+    public static function verificarCriarAPPTabela()
+    {
 
+        $query = 'CREATE TABLE IF NOT EXISTS `' . app::$tableName . '` (
+            tempoOnline datetime not null
+        )';
+        try {
+            $pdo = self::conectar()->prepare($query);
+            $pdo->execute();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            exit;
+        }
+
+
+    }
+    private static function verificarCriarProdutosTabela()
+    {
         $query = 'CREATE TABLE IF NOT EXISTS `' . Produto::TABLE . '` (';
 
         $produtoModel = new Produto();
@@ -112,10 +148,14 @@ class database
 
         $pdo = self::conectar()->prepare($query);
         $pdo->execute();
+    }
 
-
-
-
+    public static function verificarErros(): false|string
+    {
+        if (isset($_SESSION['error'][0]['bancoDadosError'])) {
+            return $_SESSION['error'][0]['bancoDadosError'];
+        }
+        return false;
     }
 
 }

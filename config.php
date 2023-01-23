@@ -1,6 +1,7 @@
 <?php
 // CONFIGURAÇÕES GERAIS
-ini_set('memory_limit', '-1');
+//ini_set('memory_limit', '-1');
+set_time_limit(500);
 
 if(!defined('HOME'))
     define('HOME', 'Projeto');
@@ -16,9 +17,9 @@ spl_autoload_register(function ($className) {
 
 });
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
+if (session_status() !== PHP_SESSION_ACTIVE) 
     session_start();
-}
+
 session_regenerate_id();
 date_default_timezone_set('America/Sao_Paulo');
 if (!defined('DATABASE'))
@@ -54,7 +55,7 @@ function reescreverHTACCESS()
     RewriteCond %{SCRIPT_FILENAME} !-d
     RewriteRule ^(.*)$ index.php [NC,L]
     SetEnvIf Referer ".HOME_URL." localreferer
-    <FilesMatch \.(jpg|jpeg|png|gif|css|json|gz)$>
+    <FilesMatch \.(jpg|jpeg|png|gif|css|json|gz|xml)$>
     Order deny,allow
     Deny from all
     Allow from env=localreferer

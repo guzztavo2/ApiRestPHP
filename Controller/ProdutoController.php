@@ -3,37 +3,56 @@
 namespace controller;
 
 use classe\routes;
-use ErrorException;
-class ProdutoController{
+use model\app;
+use model\CRON;
+
+class ProdutoController
+{
 
     private const Header = 'view\componentes\header.php';
     private const Footer = 'view\componentes\footer.php';
     public const assetsDir = 'view\assets';
-    private array $error = [];
 
-    public function __construct(array $hasError = null){
-        $this->error = $hasError !== null ? $hasError : [];
-
+    public function __construct(array $hasError = null)
+    {
+        $_SESSION['error'] = $hasError !== null ? $hasError : [];
         new routes();
     }
 
-    public static function home(){
-        $ola = 'AAA';
+    public static function home()
+    {
+        $cron = new CRON();
+        $app = new app();
+        var_export($app);
+        exit;
+        if (isset($_SESSION['error'][0]['bancoDadosError']))
+            self::renderView('home', [
+                'bancoErro' => $_SESSION['error'][0]['bancoDadosError'],
 
-        self::renderView('home', ['ola' => $ola]);
+
+            ]);
+        else
+            self::renderView('home', [
+
+            ]);
+
+
     }
 
 
-    public static function renderView(string $document, array $data = null,string $header = self::Header,string $footer = self::Footer){
+    public static function renderView(string $document, array $data = null, string $header = self::Header, string $footer = self::Footer)
+    {
         extract($data);
-
-
-        
         require_once($header);
-        require_once('view/'.$document.'.php');
+        require_once('view/' . $document . '.php');
         require_once($footer);
     }
 
-
+    public static function primeiraConexao()
+    {        
+        require_once('view/primeiraConexao.php');
+        $_SESSION['primeiraConexao'] = true;
+        exit;
+    }
 
 }

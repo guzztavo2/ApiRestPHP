@@ -4,3 +4,5 @@
 /.vscode
 .htaccess
 /arquivos
+/sistemaCRON-Windows
+/sistemaCRON-Windows/agendador.xml

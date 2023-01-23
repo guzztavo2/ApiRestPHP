@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<Task xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task" version="1.2">
+        <RegistrationInfo>
+        <Date>2023-01-23T11:59:17.3801063</Date>
+        <Author>Laptop-user256</Author>
+        <Description>Tarefa criada para atualizar o banco de dados, no melhor horario, do servidor de Produtos.</Description>
+        <URI>\sincronizarServidorPHP</URI>
+        </RegistrationInfo>
+        <Triggers>
+        <CalendarTrigger>
+        <StartBoundary>2023-01-23T04:00:00-03:00</StartBoundary>
+        <Enabled>true</Enabled>
+        <ScheduleByDay>
+        <DaysInterval>1</DaysInterval>
+        </ScheduleByDay>
+        </CalendarTrigger>
+        </Triggers>
+        <Principals>
+        <Principal id="Author">
+        <UserId>S-1-5-21-91566599-1036412710-562258968-1001</UserId>
+        <LogonType>InteractiveToken</LogonType>
+        <RunLevel>LeastPrivilege</RunLevel>
+        </Principal>
+        </Principals>
+        <Settings>
+        <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+        <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
+        <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
+        <AllowHardTerminate>false</AllowHardTerminate>
+        <StartWhenAvailable>false</StartWhenAvailable>
+        <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
+        <IdleSettings>
+        <StopOnIdleEnd>true</StopOnIdleEnd>
+        <RestartOnIdle>false</RestartOnIdle>
+        </IdleSettings>
+        <AllowStartOnDemand>true</AllowStartOnDemand>
+        <Enabled>true</Enabled>
+        <Hidden>false</Hidden>
+        <RunOnlyIfIdle>false</RunOnlyIfIdle>
+        <WakeToRun>false</WakeToRun>
+        <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
+        <Priority>7</Priority>
+        </Settings>
+        <Actions Context="Author">
+        <Exec>
+        <Command>"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"</Command>
+        <Arguments>https://http://localhost/Projeto//CronUpdateWindowsTask</Arguments>
+        </Exec>
+        </Actions>
+        </Task>
