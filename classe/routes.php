@@ -9,17 +9,16 @@ class routes
 {
     private static $url;
     const HOME_URL = HOME_URL;
-    const ROTAS = ['/', 'Produtos','CronUpdateWindowsTask'];
     const REQUESTS = ['GET', 'PUT', 'DELETE'];
 
     private $requestMethod;
     public function __construct()
     {
         $this->validarMethodRequest();
-        $this->validarCaminho();
+        $this->validarRotas();
     }
     
-    private function validarCaminho(){
+    private function validarRotas(){
         $url = '';
         if (!isset(self::getLocation()[1]))
             $url = '/';
@@ -108,9 +107,24 @@ class routes
         ProdutoController::home();
     }
     public function CronUpdateWindowsTask(){
-        $this->checkFirstConnectInServer();
-        $cron = new CRON();
-        $cron->executarCron();
+        $datetime = new \DateTime('now');
+        $datetime = $datetime->format('h');     
+
+        if($datetime == '04'){     
+            $cron = new CRON();
+            $cron->executarCron();
+            routes::redirect(routes::HOME_URL);
+        }
+        else{
+            
+        if($this->requestMethod === 'PUT'){
+            $cron = new CRON();
+            $cron->executarCron();
+            exit('finalizado');
+        } else
+        exit('Esse método: ' . $this->requestMethod . '.<br>Não é valido para atualizar o serviço. <br> <a href="'.routes::HOME_URL.'">Clique aqui e volte para o inicio</a>');
+            
+        }
 
     }
     public function produtos()

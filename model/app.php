@@ -23,20 +23,14 @@ class app{
     }
     public static function selecione():app{
         $cron = database::selectAll(app::$tableName);
-        return self::arrayToClass($cron)[0];
+        $cron = self::arrayToClass($cron);
+        
+        return $cron;
     }
  public static function arrayToClass(array $listItems){
-        $produtoKeys = array_keys((array) new app);
-        $resultado = [];
-        foreach($listItems as $item){
-            $produto = new app();
-           
-            foreach($produtoKeys as $key){
-                $produto->{$key} = $item[$key];
-            }
-            $resultado[] = $produto;
-        }
-        return $resultado;
+        $app = new app();
+        $app->tempoOnline = new \DateTime($listItems[0]['tempoOnline']);    
+        return $app;      
     }
 
     public function salvar(){

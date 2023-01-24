@@ -1,7 +1,5 @@
 <?php
-
-
-
+use classe\database;
 ?>
 <div class="row container mx-auto">
     <div class="row col-12 m-2 p-2 shadow" style="border: 1px solid #cccc">
@@ -54,14 +52,33 @@
             <div class="text-bg-success col-5 shadow p-2">
                 <span class="fs-5">Ultima vez executado:</span>
             </div>
-            <button type="button" class="btn btn-outline-primary shadow col-6 mx-auto">Primary</button>
+            <button type="button" class="btn btn-outline-primary shadow col-6 mx-auto"><?php
+            if($cron === null)
+                echo 'Ainda não foi executado';
+            else{
+            $datetime = new DateTime('now');
+            $interval = date_diff($cron->ultimaExecucao, $datetime);    
+            echo $interval->format('%d dias, %h horas, %i minutos');
+        }
+            ?></button>
 
         </div>
         <div class="col-6 row mx-auto m-1 p-2" style="border: 1px solid #cccc">
             <div class="text-bg-success col-5 shadow p-2">
                 <span class="fs-5">Tempo online:</span>
             </div>
-            <button type="button" class="btn btn-outline-dark shadow col-6 mx-auto">Primary</button>
+            <button type="button" class="btn btn-outline-dark shadow col-6 mx-auto"
+            data-bs-toggle="tooltip" data-bs-placement="top"
+            data-bs-html="true"
+            data-bs-custom-class="custom-tooltip"
+            data-bs-title="This top tooltip is themed via CSS variables."
+            
+            ><?php
+            $datetime = new DateTime('now');
+            $interval = date_diff($app->tempoOnline, $datetime);    
+            echo $interval->format('%d dias, %h horas, %i minutos').' online';
+            
+            ?></button>
 
         </div>
 
@@ -70,16 +87,34 @@
             <div class="text-bg-success col-5 shadow p-2">
                 <span class="fs-5">Uso da Memória:</span>
             </div>
-            <button type="button" class="btn btn-outline-danger shadow col-6 mx-auto">Primary</button>
+            <button type="button" class="btn btn-outline-danger shadow col-6 mx-auto">
+                <?php 
+                if($cron !== null)
+                echo $cron->UsoMemoria;
+                else
+                echo 'Ainda não foi executado';
+                ?>
+            </button>
 
         </div>
         <div class="col-6 row mx-auto m-1 p-2" style="border: 1px solid #cccc">
 
             <div class="text-bg-success col-5 shadow p-2">
-                <span class="fs-5">Próxima execução:</span>
+                <span class="fs-5">Próxima execução (automática):</span>
 
             </div>
-            <button type="button" class="btn btn-outline-success col-6 mx-auto">Primary</button>
+            <button type="button" class="btn btn-outline-success col-6 mx-auto">
+            <?php
+            $datetime = new DateTime('now');
+            //H:i:s d-m-Y
+            $datetime2 = date(database::BrDateTimeFormat, strtotime($datetime->format(database::BrDateTimeFormat).'+ 1 day'));
+            $datetime2 = new DateTime($datetime2);
+            $datetime2->setTime(4, 0, 0);
+            $interval = date_diff($datetime, $datetime2);    
+            echo $interval->format('%h horas e %i minutos');
+            
+            ?>
+            </button>
 
         </div>
         <div class="col-12 row mx-auto m-1 p-2" style="border: 1px solid #cccc">
@@ -88,7 +123,7 @@
                 <span class="fs-5">Executar agora:</span>
 
             </div>
-            <button type="button" class="btn btn-outline-primary col-8 shadow mx-auto">Primary</button>
+            <button type="button" id="btnExecute" class="btn btn-outline-primary col-8 shadow mx-auto">Clique aqui e execute agora</button>
 
         </div>
 

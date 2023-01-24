@@ -16,7 +16,7 @@ class database
     static $pdo;
     private const HOST = DATABASE['HOST'], USERNAME = DATABASE['USERNAME'], PASSWORD = DATABASE['PASSWORD'], DATABASE = DATABASE['DATABASE'];
     public const MYSQLDateFormat = 'Y-m-d H:i:s';
-
+    public const BrDateTimeFormat = 'H:i:s d-m-Y';
 
     public static function conectar()
     {
@@ -64,7 +64,7 @@ class database
         $pdo = database::conectar()->prepare('SELECT * FROM `' . $tableName . '`');
         $pdo->execute();
         $pdo->setFetchMode(\PDO::FETCH_ASSOC);
-
+     
         return $pdo->fetchAll();
     }
     public static function find($tableName, array $options)

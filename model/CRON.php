@@ -35,22 +35,19 @@ class CRON
         $pdo = database::conectar()->prepare('INSERT INTO `' . self::$tableName . '` (`ultimaExecucao`,`UsoMemoria`) VALUES (?,?)');
         $pdo->execute([$this->ultimaExecucao->format(database::MYSQLDateFormat), $this->UsoMemoria]);
     }
-    public static function selecione():CRON{
+    public static function selecione():CRON | null{
         $cron = database::selectAll(CRON::$tableName);
-        return self::arrayToClass($cron)[0];
+       
+    
+        if(count($cron) > 0)
+            return self::arrayToClass($cron);
+        return null;
     }
- public static function arrayToClass(array $listItems){
-        $produtoKeys = array_keys((array) new CRON);
-        $resultado = [];
-        foreach($listItems as $item){
-            $produto = new CRON();
-           
-            foreach($produtoKeys as $key){
-                $produto->{$key} = $item[$key];
-            }
-            $resultado[] = $produto;
-        }
-        return $resultado;
+    public static function arrayToClass(array $listItems){
+        $app = new CRON();
+        $app->ultimaExecucao = new \DateTime($listItems[0]['ultimaExecucao']);    
+        $app->UsoMemoria = $listItems[0]['UsoMemoria'];
+        return $app;      
     }
     public static function criarAgendaCRON()
     {

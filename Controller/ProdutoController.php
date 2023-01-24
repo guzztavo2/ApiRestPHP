@@ -23,17 +23,18 @@ class ProdutoController
     {
         $cron = new CRON();
         $app = new app();
-        var_export($app);
-        exit;
+        $app = $app->selecione();
+        $cron = $cron->selecione();
+       
         if (isset($_SESSION['error'][0]['bancoDadosError']))
             self::renderView('home', [
                 'bancoErro' => $_SESSION['error'][0]['bancoDadosError'],
-
-
+        
             ]);
         else
             self::renderView('home', [
-
+                'cron' => $cron,
+                'app' => $app
             ]);
 
 
