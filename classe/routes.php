@@ -1,4 +1,5 @@
 <?php
+
 namespace classe;
 
 use controller\ProdutoController as ProdutoController;
@@ -10,6 +11,7 @@ class routes
     private static $url;
     const HOME_URL = HOME_URL;
     const REQUESTS = ['GET', 'PUT', 'DELETE'];
+    const listOFGETREQUEST = ['buscar', 'pagina'];
 
     private $requestMethod;
     public function __construct()
@@ -17,76 +19,96 @@ class routes
         $this->validarMethodRequest();
         $this->validarRotas();
     }
-    
-    private function validarRotas(){
-        $url = '';
-        if (!isset(self::getLocation()[1]))
+    private function verificarGetRequest(string $url)
+    {
+        if (count($_GET) > 0) {
+            if ($url === 'produtos') {
+                foreach ($_GET as $key => $value) {
+                    if (in_array($key, self::listOFGETREQUEST))
+                        return;
+                }
+                routes::redirect(routes::HOME_URL);
+            } else
+                routes::redirect(routes::HOME_URL);
+        }
+    }
+    private function validarRotas()
+    {
+
+        if (gettype(self::getLocation())  === 'array' && count(self::getLocation()) >= 3)
+            $url = self::getLocation()[1];
+        else if (!isset(self::getLocation()[1]))
             $url = '/';
         else
-            $url = self::getLocation()[1];
+            $url = self::getLocation();
+
 
         switch ($url) {
             case '/':
+                self::verificarGetRequest('home');
                 $this->home();
-                return;   
-                case 'Produtos':
-                    $this->produtos();
-                    return;
-                case 'CronUpdateWindowsTask':
-                    $this->CronUpdateWindowsTask();
-                    break;         
-            case 'css':
-                if(count(self::getLocation())  == 3){
-                 
-                    header("Content-type: text/css", true);                                            
+                return;
+            case 'produtos':
+                self::verificarGetRequest('produtos');
+                $this->produtos();
+                return;
+            case 'CronUpdateWindowsTask':
 
-                    switch(self::getLocation()[2]){
+                $this->CronUpdateWindowsTask();
+                break;
+            case 'css':
+                if (count(self::getLocation()) == 3) {
+
+                    header("Content-type: text/css", true);
+
+                    switch (self::getLocation()[2]) {
 
                         case 'bootstrap':
-                            $dir = ProdutoController::assetsDir.'\\css\\bootstrap.min.css';
+                            $dir = ProdutoController::assetsDir . '\\css\\bootstrap.min.css';
                             include($dir);
                             exit;
                         case 'style':
-                            $dir = ProdutoController::assetsDir.'\\css\\style.css';
+                            $dir = ProdutoController::assetsDir . '\\css\\style.css';
                             include($dir);
                             exit;
                         default:
-                        self::redirect(self::HOME_URL);
+                            self::redirect(self::HOME_URL);
                     }
-                }else
-                    self::redirect(self::HOME_URL);               
-            break;
+                } else
+                    self::redirect(self::HOME_URL);
+                break;
             case 'js':
-                if(count(self::getLocation())  == 3){
-                 
-                    header("Content-type: text/javascript", true);                                            
+                if (count(self::getLocation())  == 3) {
 
-                    switch(self::getLocation()[2]){
+                    header("Content-type: text/javascript", true);
+
+                    switch (self::getLocation()[2]) {
 
                         case 'bootstrap':
-                            $dir = ProdutoController::assetsDir.'\\js\\bootstrap.bundle.min.js';
+                            $dir = ProdutoController::assetsDir . '\\js\\bootstrap.bundle.min.js';
                             include($dir);
                             exit;
                         case 'code':
-                            $dir = ProdutoController::assetsDir.'\\js\\code.js';
+                            $dir = ProdutoController::assetsDir . '\\js\\code.js';
                             include($dir);
                             exit;
                         default:
-                        self::redirect(self::HOME_URL);
+                            self::redirect(self::HOME_URL);
                     }
-                }else
-                    self::redirect(self::HOME_URL);   
-            break;
-         
-            default:            
+                } else
+                    self::redirect(self::HOME_URL);
+                break;
+
+            default:
                 self::redirect(HOME_URL);
         }
     }
 
-    private function checkFirstConnectInServer(){
-    
+    private function checkFirstConnectInServer()
+    {
 
-        if(!app::checkExist()){
+
+        if (!app::checkExist()) {
             if (!database::verificarErros()) {
                 database::verificarCriarAPPTabela();
                 $app = new app();
@@ -94,50 +116,60 @@ class routes
             }
 
             ProdutoController::primeiraConexao();
-     
+        }
     }
-    }
-    
+
     public function home()
     {
         $this->checkFirstConnectInServer();
         if ($this->requestMethod !== 'GET')
-        throw new \UnexpectedValueException('O tipo de método:' . $this->requestMethod . '. Não é valido aqui.');
+            throw new \UnexpectedValueException('O tipo de método:' . $this->requestMethod . '. Não é valido aqui.');
 
         ProdutoController::home();
     }
-    public function CronUpdateWindowsTask(){
+    public function CronUpdateWindowsTask()
+    {
         $datetime = new \DateTime('now');
-        $datetime = $datetime->format('h');     
+        $datetime = $datetime->format('h');
 
-        if($datetime == '04'){     
+        if ($datetime == '04') {
             $cron = new CRON();
             $cron->executarCron();
             routes::redirect(routes::HOME_URL);
-        }
-        else{
-            
-        if($this->requestMethod === 'PUT'){
-            $cron = new CRON();
-            $cron->executarCron();
-            exit('finalizado');
-        } else
-        exit('Esse método: ' . $this->requestMethod . '.<br>Não é valido para atualizar o serviço. <br> <a href="'.routes::HOME_URL.'">Clique aqui e volte para o inicio</a>');
-            
-        }
+        } else {
 
+            if ($this->requestMethod === 'PUT') {
+
+                $cron = new CRON();
+                $cron->executarCron();
+                exit('finalizado');
+            } else
+                exit('Esse método: ' . $this->requestMethod . '.<br>Não é valido para atualizar o serviço. <br> <a href="' . routes::HOME_URL . '">Clique aqui e volte para o inicio</a>');
+        }
     }
     public function produtos()
     {
         $this->checkFirstConnectInServer();
 
-        $codigoProduto = (isset($_GET['codigo'])) ? filter_input(INPUT_GET, 'codigo', FILTER_VALIDATE_INT) : null;
+        if (gettype(self::getLocation()) === 'array' && isset(self::getLocation()[2])) {
+            if (self::getLocation()[2] === 'id') {
+                if (!isset(self::getLocation()[3]))
+                    $codigoProduto = null;
+                else
+                    $codigoProduto = strlen(self::getLocation()[3]) > 0 ? (string) self::getLocation()[3] : null;
+            } else {
+                self::redirect(self::HOME_URL . 'produtos');
+            }
+        }
+      
+
         switch ($this->requestMethod) {
             case 'GET':
-                if ($codigoProduto === null)
-                    exit('Todos os produtos');
-                else
+                if (!isset($codigoProduto)) {
+                    ProdutoController::todosProdutos();
+                } else {
                     exit('Mostrar o produto de id:' . $codigoProduto);
+                }
                 break;
             case 'PUT':
                 if ($codigoProduto === null)
@@ -154,14 +186,13 @@ class routes
             default:
                 throw new \UnexpectedValueException('O tipo de método:' . $this->requestMethod . '. Não é valido aqui.');
         }
-
     }
 
     public function validarMethodRequest()
     {
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
 
-        foreach(self::REQUESTS as $request){
+        foreach (self::REQUESTS as $request) {
             if ($this->requestMethod === $request)
                 return;
         }
@@ -170,17 +201,36 @@ class routes
     public static function getLocation()
     {
         self::setLocation();
+
         return self::$url;
     }
     private static function setLocation()
     {
         $url = (string)\filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_DEFAULT);
+
         $url = str_replace('/' . HOME, '', $url);
         $url = explode('/', $url);
+
+
         $url_test = $url[1];
-        if (strlen($url_test) === 0)
-            $url = '/';
-            self::$url = $url;
+
+        if (strlen($url_test) === 1) {
+            self::redirect(self::HOME_URL);
+        }
+
+        if (gettype($url) === 'array') {
+
+            if (count($url) >= 3) {
+                self::$url = $url;
+                return;
+            }
+            $url = explode('?', $url[1]);
+
+            self::$url = $url[0];
+            return;
+        }
+
+        self::$url = $url;
     }
 
     public static function redirect($url)
@@ -188,6 +238,4 @@ class routes
         header('location: ' . $url);
         exit;
     }
-
-
 }

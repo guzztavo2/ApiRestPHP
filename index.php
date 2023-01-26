@@ -14,7 +14,6 @@ try {
     $error[] = ['bancoDadosError' => $e->getMessage()]; 
 }
 
-
 if(count($error) > 0)
     new ProdutoController($error);
 else

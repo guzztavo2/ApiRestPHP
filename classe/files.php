@@ -1,4 +1,5 @@
 <?php
+
 namespace classe;
 
 use FFI\Exception;
@@ -11,7 +12,7 @@ class files
 
     const dirDownloads = 'arquivos/';
     const dirProdutos = self::dirDownloads . 'produtos/';
-    public $arquivos = [];
+    public array | string $arquivos = [];
 
 
     private array $resultFiles;
@@ -19,24 +20,25 @@ class files
     public function __construct()
     {
         $this->setArquivosFromUrl();
-
     }
     private function setArquivosFromUrl()
     {
 
         $this->arquivos = explode("\n", @file_get_contents(self::filesTxt));
+
         $error = error_get_last();
+
         if (isset($error))
             throw new \Exception('Falha ao se conectar com o servidor "challenges.coode".');
 
         array_pop($this->arquivos);
-
     }
     public function execute()
     {
 
         $arquivosList = $this->arquivos;
 
+        database::truncateTabela(produto::TABLE);
         for ($n = 0; $n < count($arquivosList); $n++) {
             $this->arquivos = $arquivosList;
             try {
@@ -103,7 +105,6 @@ class files
             gzclose($arquivo);
             rename($arquivoSaida_Nome, $this->arquivos);
         }
-
     }
     private function setResultadoArquivos()
     {
@@ -121,24 +122,23 @@ class files
 
     public function getResultFiles()
     {
-        $keys = array_keys((array) $this->resultFiles[0]);
+
+        $prod = new produto();
+        $keys = array_keys((array) $prod->getListProperties());
+
         $listProdutos = [];
 
+     
 
         foreach ($this->resultFiles as $result) {
             $produto = new Produto();
             foreach ($keys as $key) {
-                if (property_exists($produto, $key)) {
-                    if ($key == 'code')
-                        $result->{$key} = str_replace('"', '', $result->{$key});
+                if (property_exists($this->resultFiles[0], $key))
                     $produto->{$key} = $result->{$key};
-
-                }
-
             }
             $listProdutos[] = $produto;
         }
-
+        
         foreach ($listProdutos as $produto)
             database::insertProduto($produto);
 

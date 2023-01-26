@@ -1,9 +1,5 @@
 <?php
 namespace classe;
-
-use DomainException;
-use ErrorException;
-use FFI\Exception;
 use model\app;
 use model\CRON;
 use model\produto as Produto;
@@ -36,7 +32,9 @@ class database
     }
     public static function insertProduto(Produto $produto)
     {
-        $keys = array_keys((array) $produto);
+       
+        $keys = array_keys($produto->getListProperties());
+     
         $bind = array_map(function () {
             return '?';
         }, $keys);
@@ -44,19 +42,23 @@ class database
         $bind = implode(',', $bind);
         $keys = implode(',', $keys);
 
-        $produto->setStatus(Status::DRAFT);
-        //$produto->imported_t = date('Y-m-d H:i:s');
+      
+        
+        $produto->setStatus(Status::PUBLISHED);
+        $produto->code = str_replace('"', '', $produto->code);
+        $produto->{'imported_t'} = date('Y-m-d H:i:s');
         $sql = 'INSERT INTO `' . Produto::TABLE . '` (' . $keys . ') VALUES (' . $bind . ')';
-
+       
+        
         $pdo = self::conectar()->prepare($sql);
 
         $count = 1;
-        foreach ($produto as $key => $value) {
+        foreach ($produto->getListProperties() as $key => $value) {
             $pdo->bindValue($count, $value, \PDO::PARAM_STR);
             $count++;
         }
-
         $pdo->execute();
+ 
     }
 
     public static function selectAll(string $tableName): array
@@ -69,8 +71,16 @@ class database
     }
     public static function find($tableName, array $options)
     {
+    
         $pdo = database::conectar()->prepare('SELECT * FROM `' . $tableName . '` ' . $options[0]);
-        $pdo->execute($options[1]);
+
+       
+        if(!isset($options[1]))
+            $pdo->execute();
+        else
+            $pdo->execute($options[1]);
+
+
         $pdo->setFetchMode(\PDO::FETCH_ASSOC);
         return $pdo->fetchAll();
 
@@ -90,12 +100,15 @@ class database
     {
         self::verificarCriarProdutosTabela();
         self::verificarCriarCRONTabela();
+       
     }
     public static function verificarCriarCRONTabela()
     {
         $query = 'CREATE TABLE IF NOT EXISTS `' . CRON::$tableName . '` (
-            ultimaExecucao datetime not null,
-            UsoMemoria varchar(100) not null
+            ultimaExecucao datetime,
+            UsoMemoria varchar(100),
+            tempoExecucao varchar(20),
+            emExecucao boolean
         )';
         $pdo = self::conectar()->prepare($query);
         $pdo->execute();
@@ -121,9 +134,10 @@ class database
         $query = 'CREATE TABLE IF NOT EXISTS `' . Produto::TABLE . '` (';
 
         $produtoModel = new Produto();
-        $produtoModel = array_keys((array) $produtoModel);
+        $produtoModel = $produtoModel->getListProperties();
+
         $queryItens = '';
-        foreach ($produtoModel as $item) {
+        foreach ($produtoModel as $item => $value) {
             switch ($item) {
                 case 'created_t':
                     $queryItens .= $item . ' datetime not null,';
@@ -143,11 +157,15 @@ class database
                     break;
             }
         }
+       
         $queryItens = substr($queryItens, 0, -1) . ')';
         $query .= $queryItens;
+      
 
         $pdo = self::conectar()->prepare($query);
+     
         $pdo->execute();
+     
     }
 
     public static function verificarErros(): false|string
