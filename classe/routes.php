@@ -150,8 +150,11 @@ class routes
     public function produtos()
     {
         $this->checkFirstConnectInServer();
-
+        
         if (gettype(self::getLocation()) === 'array' && isset(self::getLocation()[2])) {
+            if(count(self::getLocation()) > 4 )
+                self::redirect(self::HOME_URL.'produtos');
+            
             if (self::getLocation()[2] === 'id') {
                 if (!isset(self::getLocation()[3]))
                     $codigoProduto = null;
@@ -160,15 +163,14 @@ class routes
             } else {
                 self::redirect(self::HOME_URL . 'produtos');
             }
-        }
-      
+        }     
 
         switch ($this->requestMethod) {
             case 'GET':
                 if (!isset($codigoProduto)) {
                     ProdutoController::todosProdutos();
                 } else {
-                    exit('Mostrar o produto de id:' . $codigoProduto);
+                    ProdutoController::visualizarPaginaProduto($codigoProduto);
                 }
                 break;
             case 'PUT':

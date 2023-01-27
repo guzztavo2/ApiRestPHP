@@ -27,8 +27,8 @@
                         <?php // var_export($Produtos->todosProdutos); // var_export($Produtos->totalPaginas);
 
 
-
-                        foreach ($Produtos->todosProdutos[0]->getListProperties() as $key => $value) : ?>
+                        $produtos = new model\produto();
+                        foreach ($produtos->getListProperties() as $key => $value) : ?>
                             <th scope="col">
                                 <?php echo $key ?>
                             </th>
@@ -94,13 +94,15 @@
                 <ul class="pagination pagination-lg justify-content-center w-100" style="overflow: auto;">
 
                     <?php
+              
+                    if($Produtos->totalPaginas !== 0):
                     $paginaAtual = controller\ProdutoController::getPaginaAtual();
 
                     if ($paginaAtual === 1) :
 
                     ?>
                         <li class="page-item">
-                            <a class="page-link text-bg-dark" disabled aria-label="Previous">
+                            <a class="page-link text-bg-secondary" disabled aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -114,7 +116,7 @@
                     <?php
                     endif;
                     //$paginaAtual = ProdutoController::getPaginaAtual();
-
+                    if($Produtos->totalPaginas > 10){
                     if ($paginaAtual === 1) {
                         $paginaInicio =  $paginaAtual;
                         $paginaFinal =  $paginaAtual + 9;
@@ -129,6 +131,10 @@
                         $paginaInicio =  $paginaAtual - 9;
                         $paginaFinal =  $Produtos->totalPaginas;
                     }
+                }else if($Produtos->totalPaginas <= 10){
+                    $paginaInicio =  1;
+                    $paginaFinal =  $Produtos->totalPaginas;
+                }
                     for ($pagina = $paginaInicio; $pagina <= $paginaFinal; $pagina++) :
 
                     ?>
@@ -144,7 +150,7 @@
 
                     ?>
                         <li class="page-item">
-                            <a class="page-link text-bg-dark" disabled aria-label="Previous">
+                            <a class="page-link text-bg-secondary" disabled aria-label="Previous">
                             <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -164,4 +170,4 @@
         </div>
     </div>
 
-<?php endif; ?>
+<?php endif; endif; ?>

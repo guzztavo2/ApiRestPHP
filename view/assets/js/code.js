@@ -4,7 +4,7 @@ window.onload = function () {
     if (window.location.href.split('/')[3] === HOME_PATH.split('/')[3] && window.location.href.split('/')[4] !== 'produtos')
         new main();
     else if(window.location.href.split('/')[3] === HOME_PATH.split('/')[3] && window.location.href.split('/')[4] === 'produtos'){
-        alert('a');
+    
     }
 
 
