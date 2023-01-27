@@ -71,9 +71,13 @@ use classe\database;
                     if ($cron === null)
                         echo 'Ainda não foi executado';
                     else {
+                        if($cron->ultimaExecucao !== null) :
                         $datetime = new DateTime('now');
                         $interval = date_diff($cron->ultimaExecucao, $datetime);
                         echo $interval->format('%h/%i/%s');
+                        else:
+                        echo 'Ainda não foi executado';
+                        endif;
                     }
                     ?></button>
 
@@ -100,7 +104,7 @@ use classe\database;
                 <button type="button" class="btn btn-outline-danger shadow col-6 mx-auto rounded">
                     <?php
                     if ($cron !== null)
-                        echo $cron->UsoMemoria;
+                        echo $cron->UsoMemoria !== null ? $cron->UsoMemoria : 'Ainda não foi executado.';
                     else
                         echo 'Ainda não foi executado';
                     ?>
@@ -147,7 +151,7 @@ use classe\database;
                 <button type="button" class="btn btn-outline-danger shadow col-6 mx-auto rounded">
                     <?php
                     if ($cron !== null)
-                        echo $cron->tempoExecucao;
+                        echo $cron->tempoExecucao !== null ? $cron->tempoExecucao : 'Ainda não foi executado.';
                     else
                         echo 'Ainda não foi executado';
                     ?>
