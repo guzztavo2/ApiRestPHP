@@ -65,9 +65,9 @@ class produto extends status {
     
         $this->salvar($codigoAntigo);
     }
-    private function salvar(string $codeAntigoUpdate = null){
+    public function salvar(string $codeAntigoUpdate = null){
 
-        $keys = array_keys((array) $this);
+        $keys = array_keys((array) $this->getListProperties());
 
         $keys = array_map(function ($val) {
             return '`'.$val.'` = ?,';
@@ -77,12 +77,12 @@ class produto extends status {
  
         $keys = substr($keys, 0, -1);
  
-        $values = array_values((array) $this);
+        $values = array_values((array) $this)[0];
 
         $keyValues = array_merge([$keys], [$values]);
-        
+       
         if($codeAntigoUpdate !== null)
-            database::salvar(self::TABLE,$keyValues, ['`code` = ?', $codeAntigoUpdate]);
+            database::salvar(self::TABLE,$keyValues, ['`code` = ?', [$codeAntigoUpdate]]);
        
      
 

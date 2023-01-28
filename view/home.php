@@ -15,9 +15,9 @@ use classe\database;
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <?php endif; ?>
-<div class="row container mx-auto">
+<div class="row container justify-content-between m-0 p-5 mx-auto ">
     <div class="row col-12 m-2 p-2 shadow" style="border: 1px solid #cccc">
-        <h1 class="fw-light fs-4 text-bg-primary col-auto p-3 shadow rounded" style="text-transform:uppercase;">Status
+        <h1 class="fw-light fs-4 text-bg-primary col-auto p-4 m-2 shadow rounded align-items-center d-flex" style="text-transform:uppercase;">Status
             da base
             de dados
         </h1>
@@ -31,8 +31,8 @@ use classe\database;
         <?php else : ?>
             <div class="col-12 row mx-auto m-1 p-2" style="border: 1px solid #cccc">
 
-                <div class="text-bg-success col-3 shadow p-2">
-                    <span class="fs-5 col-12 text-center">STATUS:</span>
+                <div class="text-bg-success col-3 shadow p-2 d-flex align-items-center justify-content-center text-center rounded">
+                    <span class="fs-5 col-12">STATUS:</span>
 
                 </div>
                 <button type="button" class="btn btn-primary col-5 shadow mx-auto">Tudo funcionando perfeitamente!</button>

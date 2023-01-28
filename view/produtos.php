@@ -10,8 +10,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <?php else : ?>
-
+    <?php 
+        if(isset($_GET['buscar'])):?>
+        <a class="btn btn-danger m-2" href="<?php echo classe\routes::HOME_URL.'produtos/' ?>" rel="noopener noreferrer">
+            Você está buscando por: " <b><?php echo (string)$_GET['buscar']; ?></b> "<br>Clique aqui e volte ao inicio
+        </a>
+        <?php endif; ?>
     <div class="row mx-auto">
+      
         <div class="buscar row col-6 mx-auto">
             <form method="get">
                 <input type="text" class="form-control col-12 p-3 mt-2 shadow" name="buscar" placeholder="buscar por nome" id="">
@@ -19,8 +25,8 @@
 
         </div>
 
-        <div class="table-responsive col-12 shadow mt-4">
-            <table class="table table-striped table-dark ">
+        <div class="table-responsive col-12 shadow mt-4" >
+            <table class="table table-striped table-dark">
                 <thead class="thead-dark rounded">
 
                     <tr>
@@ -90,14 +96,15 @@
         </div>
         <div class="paginacao">
 
-            <nav aria-label="Page navigation">
-                <ul class="pagination pagination-lg justify-content-center w-100" style="overflow: auto;">
+            <nav aria-label="Page navigation" class="">
+                <ul class="pagination pagination-lg w-100 justify-content-center m-2 p-2">
 
                     <?php
               
                     if($Produtos->totalPaginas !== 0):
                     $paginaAtual = controller\ProdutoController::getPaginaAtual();
-
+                    
+                 
                     if ($paginaAtual === 1) :
 
                     ?>
@@ -122,7 +129,7 @@
                         $paginaFinal =  $paginaAtual + 9;
                     } else if($paginaAtual > 1 && $paginaAtual < 4){
                         $paginaInicio =  $paginaAtual - 1;
-                        $paginaFinal =  $paginaAtual + 4;
+                        $paginaFinal =  $paginaAtual + 9;
                     }                    
                     else if ($paginaAtual >= 4 && $paginaAtual + 5 < $Produtos->totalPaginas) {
                         $paginaInicio =  $paginaAtual - 3;

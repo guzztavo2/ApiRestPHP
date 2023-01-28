@@ -89,7 +89,10 @@ class database
     {
 
         $pdo = database::conectar()->prepare('UPDATE `' . $tablename . '` SET ' . $keys_values[0] . ' WHERE ' . $where[0]);
-        $pdo->execute(array_merge($keys_values[1], [$where[1]]));
+        $sqlArray = array_values($keys_values[1]);
+        array_push($sqlArray, $where[1][0]);
+      
+        $pdo->execute($sqlArray);
     }
     public static function truncateTabela($tablename)
     {
@@ -151,6 +154,9 @@ class database
                     break;
                 case 'nutriscore_score':
                     $queryItens .= $item . ' int not null,';
+                    break;
+                case 'ingredients_text':
+                    $queryItens .= $item . ' text not null,';
                     break;
                 default:
                     $queryItens .= $item . ' varchar(255) not null,';

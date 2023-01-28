@@ -1,9 +1,14 @@
-
 <div class="text-bg-danger col-12 row p-4 mx-auto justify-content-center">
 
     <div class="card col-4 shadow">
-        <img src="<?php echo $produto->image_url ?>" width="auto" height="40%" class="card-img-top p-2 rounded" alt="...">
-        <div class="card-body">
+        <?php 
+            var_export($produto->image_url);
+        if ($produto->image_url !== null && strlen($produto->image_url) > 0) : ?>
+            <img src="<?php echo $produto->image_url ?>" width="auto" height="40%" class="card-img-top p-2 rounded" alt="...">
+        <?php else : ?>
+            <div style="border: 1px solid #cccc; cursor:not-allowed; user-select:none;" class="w-100 text-bg-light d-block text-center align-items-center p-4 rounded shadow">Esse produto não possui imagem.</div>
+        <?php endif; ?>
+        <div class="card-body d-flex flex-column justify-content-around">
             <h5 class="card-title text-dark">Produto: <?php echo $produto->product_name; ?></h5>
 
             <p class="card-text text-dark">Código: <?php echo $produto->code;  ?></p>
@@ -54,20 +59,20 @@
                     case 'url':
                         break;
                     default:
-                    if($item !== null && strlen($item) > 0 && $item !== 0 && $item !== 0.0)
-                    echo '<p class="card-text text-dark">'.$key.': '.$item.'</p>';
-                    break;
+                        if ($item !== null && strlen($item) > 0 && $item !== 0 && $item !== 0.0)
+                            echo '<p class="card-text text-dark">' . $key . ': ' . $item . '</p>';
+                        break;
                 }
             }
 
             ?>
 
 
-            <p class="card-text"><small class="text-muted">Ultima atualização: <?php 
-             $datetime = new DateTime('now');
-             $interval = date_diff($ultimaVezAtualizado, $datetime);
-             echo $interval->format('%h horas e %i minutos ');
-            ?></small></p>
+            <p class="card-text justify-content-end d-flex"><small class="text-muted">Ultima atualização: <?php
+                                                                                $datetime = new DateTime('now');
+                                                                                $interval = date_diff($ultimaVezAtualizado, $datetime);
+                                                                                echo $interval->format('%h horas e %i minutos ');
+                                                                                ?></small></p>
         </div>
     </div>
 </div>
