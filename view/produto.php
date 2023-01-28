@@ -2,7 +2,6 @@
 
     <div class="card col-4 shadow">
         <?php 
-            var_export($produto->image_url);
         if ($produto->image_url !== null && strlen($produto->image_url) > 0) : ?>
             <img src="<?php echo $produto->image_url ?>" width="auto" height="40%" class="card-img-top p-2 rounded" alt="...">
         <?php else : ?>

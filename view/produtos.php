@@ -10,14 +10,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <?php else : ?>
-    <?php 
-        if(isset($_GET['buscar'])):?>
-        <a class="btn btn-danger m-2" href="<?php echo classe\routes::HOME_URL.'produtos/' ?>" rel="noopener noreferrer">
+    <?php
+    if (isset($_GET['buscar'])) : ?>
+        <a class="btn btn-danger m-2" href="<?php echo classe\routes::HOME_URL . 'produtos/' ?>" rel="noopener noreferrer">
             Você está buscando por: " <b><?php echo (string)$_GET['buscar']; ?></b> "<br>Clique aqui e volte ao inicio
         </a>
-        <?php endif; ?>
+    <?php endif; ?>
     <div class="row mx-auto">
-      
+
         <div class="buscar row col-6 mx-auto">
             <form method="get">
                 <input type="text" class="form-control col-12 p-3 mt-2 shadow" name="buscar" placeholder="buscar por nome" id="">
@@ -25,7 +25,7 @@
 
         </div>
 
-        <div class="table-responsive col-12 shadow mt-4" >
+        <div class="table-responsive col-12 shadow mt-4">
             <table class="table table-striped table-dark">
                 <thead class="thead-dark rounded">
 
@@ -44,52 +44,55 @@
                 </thead>
                 <tbody>
 
+                    <?php if (isset($Produtos) && count($Produtos->todosProdutos) > 0) : ?>
+                        <?php foreach ($Produtos->todosProdutos as $produto) : ?>
+                            <tr>
+                                <?php foreach ($Produtos->todosProdutos[0]->getListProperties() as $key => $value) : ?>
 
-                    <?php foreach ($Produtos->todosProdutos as $produto) : ?>
-                        <tr>
-                            <?php foreach ($Produtos->todosProdutos[0]->getListProperties() as $key => $value) : ?>
-
-                                <td>
-                                    <?php
-                                    if ($key === 'imported_t' || $key === 'created_t' || $key === 'last_modified_t') {
-                                        if ($produto->$key !== '0000-00-00 00:00:00') {
-                                            $dataTime = new DateTime($produto->$key);
-                                            echo $dataTime->format(classe\database::BrDateTimeFormat);
-                                        } else
-                                            echo '<b class="text-bg-light d-block text-center p-2">' . ucfirst($key) . ' não existe.</b>';
-                                    } else {
-                                        if ($produto->$key === null || $produto->$key === '')
-                                            echo '<b class="text-bg-light d-block text-center p-2">' . ucfirst($key) . ' não existe.</b>';
-                                        else {
-                                            if ($key === 'image_url') {
-                                                echo '<img src="' . $produto->$key . '" width="100%" height="auto"> </img>';
-                                            } else {
-                                                if ($key === 'url') {
-                                                    echo '<a class="text-bg-light d-block text-center p-2" style="text-decoration:none" href="' . $produto->$key . '"">Link de referência do produto</a>';
+                                    <td>
+                                        <?php
+                                        if ($key === 'imported_t' || $key === 'created_t' || $key === 'last_modified_t') {
+                                            if ($produto->$key !== '0000-00-00 00:00:00') {
+                                                $dataTime = new DateTime($produto->$key);
+                                                echo $dataTime->format(classe\database::BrDateTimeFormat);
+                                            } else
+                                                echo '<b class="text-bg-light d-block text-center p-2">' . ucfirst($key) . ' não existe.</b>';
+                                        } else {
+                                            if ($produto->$key === null || $produto->$key === '')
+                                                echo '<b class="text-bg-light d-block text-center p-2">' . ucfirst($key) . ' não existe.</b>';
+                                            else {
+                                                if ($key === 'image_url') {
+                                                    echo '<img src="' . $produto->$key . '" width="100%" height="auto"> </img>';
                                                 } else {
-                                                    if ($produto->$key == 0) {
-                                                        echo '<b class="text-bg-light d-block text-center p-2">' . ucfirst($key) . ' não existe.</b>';
+                                                    if ($key === 'url') {
+                                                        echo '<a class="text-bg-light d-block text-center p-2" style="text-decoration:none" href="' . $produto->$key . '"">Link de referência do produto</a>';
                                                     } else {
-                                                        if ($key === 'code') {
-                                                            echo '<a class="text-bg-light d-block text-center p-2" style="text-decoration:none" href="' . classe\routes::HOME_URL . 'produtos/id/' . $produto->$key . '"">' . $produto->$key . '</a>';
-                                                        } else
-                                                            echo $produto->$key;
+                                                        if ($produto->$key == 0) {
+                                                            echo '<b class="text-bg-light d-block text-center p-2">' . ucfirst($key) . ' não existe.</b>';
+                                                        } else {
+                                                            if ($key === 'code') {
+                                                                echo '<a class="text-bg-light d-block text-center p-2" style="text-decoration:none" href="' . classe\routes::HOME_URL . 'produtos/id/' . $produto->$key . '"">' . $produto->$key . '</a>';
+                                                            } else
+                                                                echo $produto->$key;
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                    ?>
+                                        ?>
 
 
-                                </td>
+                                    </td>
 
-                            <?php endforeach; ?>
-                        </tr>
-                    <?php endforeach; ?>
-
-
-
+                                <?php endforeach; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <div class="alert alert-danger alert-dismissible fade show container text-center" role="alert">
+                            Não há produtos registrados no momento!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
                 </tbody>
 
             </table>
@@ -100,76 +103,75 @@
                 <ul class="pagination pagination-lg w-100 justify-content-center m-2 p-2">
 
                     <?php
-              
-                    if($Produtos->totalPaginas !== 0):
-                    $paginaAtual = controller\ProdutoController::getPaginaAtual();
-                    
-                 
-                    if ($paginaAtual === 1) :
+
+                    if (isset($Produtos) && $Produtos->totalPaginas !== 0) :
+                        $paginaAtual = controller\ProdutoController::getPaginaAtual();
+
+
+                        if ($paginaAtual === 1) :
 
                     ?>
-                        <li class="page-item">
-                            <a class="page-link text-bg-secondary" disabled aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                    <?php else : ?>
-                        <li class="page-item">
-
-                            <a class="page-link text-bg-dark" href="<?php echo controller\ProdutoController::gerarPaginaURL($paginaAtual - 1) ?>" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                    <?php
-                    endif;
-                    //$paginaAtual = ProdutoController::getPaginaAtual();
-                    if($Produtos->totalPaginas > 10){
-                    if ($paginaAtual === 1) {
-                        $paginaInicio =  $paginaAtual;
-                        $paginaFinal =  $paginaAtual + 9;
-                    } else if($paginaAtual > 1 && $paginaAtual < 4){
-                        $paginaInicio =  $paginaAtual - 1;
-                        $paginaFinal =  $paginaAtual + 9;
-                    }                    
-                    else if ($paginaAtual >= 4 && $paginaAtual + 5 < $Produtos->totalPaginas) {
-                        $paginaInicio =  $paginaAtual - 3;
-                        $paginaFinal =  $paginaAtual + 5;
-                    } else {
-                        $paginaInicio =  $paginaAtual - 9;
-                        $paginaFinal =  $Produtos->totalPaginas;
-                    }
-                }else if($Produtos->totalPaginas <= 10){
-                    $paginaInicio =  1;
-                    $paginaFinal =  $Produtos->totalPaginas;
-                }
-                    for ($pagina = $paginaInicio; $pagina <= $paginaFinal; $pagina++) :
-
-                    ?>
-                        <?php if ($pagina == $paginaAtual) : ?>
-                            <li class="page-item"><a class="page-link text-bg-primary" disabled href="<?php echo controller\ProdutoController::gerarPaginaURL($pagina) ?>"><?php echo $pagina ?></a></li>
+                            <li class="page-item">
+                                <a class="page-link text-bg-secondary" disabled aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
                         <?php else : ?>
-                            <li class="page-item"><a class="page-link text-bg-dark" href="<?php echo controller\ProdutoController::gerarPaginaURL($pagina) ?>"><?php echo $pagina ?></a></li>
-                    <?php endif;
-                    endfor; ?>
+                            <li class="page-item">
 
-                    <?php
-                    if ($paginaAtual === $Produtos->totalPaginas) :
+                                <a class="page-link text-bg-dark" href="<?php echo controller\ProdutoController::gerarPaginaURL($paginaAtual - 1) ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        <?php
+                        endif;
+                        //$paginaAtual = ProdutoController::getPaginaAtual();
+                        if ($Produtos->totalPaginas > 10) {
+                            if ($paginaAtual === 1) {
+                                $paginaInicio =  $paginaAtual;
+                                $paginaFinal =  $paginaAtual + 9;
+                            } else if ($paginaAtual > 1 && $paginaAtual < 4) {
+                                $paginaInicio =  $paginaAtual - 1;
+                                $paginaFinal =  $paginaAtual + 9;
+                            } else if ($paginaAtual >= 4 && $paginaAtual + 5 < $Produtos->totalPaginas) {
+                                $paginaInicio =  $paginaAtual - 3;
+                                $paginaFinal =  $paginaAtual + 5;
+                            } else {
+                                $paginaInicio =  $paginaAtual - 9;
+                                $paginaFinal =  $Produtos->totalPaginas;
+                            }
+                        } else if ($Produtos->totalPaginas <= 10) {
+                            $paginaInicio =  1;
+                            $paginaFinal =  $Produtos->totalPaginas;
+                        }
+                        for ($pagina = $paginaInicio; $pagina <= $paginaFinal; $pagina++) :
 
-                    ?>
-                        <li class="page-item">
-                            <a class="page-link text-bg-secondary" disabled aria-label="Previous">
-                            <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    <?php else : ?>
-                        <li class="page-item">
+                        ?>
+                            <?php if ($pagina == $paginaAtual) : ?>
+                                <li class="page-item"><a class="page-link text-bg-primary" disabled href="<?php echo controller\ProdutoController::gerarPaginaURL($pagina) ?>"><?php echo $pagina ?></a></li>
+                            <?php else : ?>
+                                <li class="page-item"><a class="page-link text-bg-dark" href="<?php echo controller\ProdutoController::gerarPaginaURL($pagina) ?>"><?php echo $pagina ?></a></li>
+                        <?php endif;
+                        endfor; ?>
 
-                            <a class="page-link text-bg-dark" href="<?php echo controller\ProdutoController::gerarPaginaURL($paginaAtual + 1) ?>" aria-label="Previous">
-                            <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    <?php
-                    endif; ?>
+                        <?php
+                        if ($paginaAtual === $Produtos->totalPaginas) :
+
+                        ?>
+                            <li class="page-item">
+                                <a class="page-link text-bg-secondary" disabled aria-label="Previous">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        <?php else : ?>
+                            <li class="page-item">
+
+                                <a class="page-link text-bg-dark" href="<?php echo controller\ProdutoController::gerarPaginaURL($paginaAtual + 1) ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        <?php
+                        endif; ?>
 
                 </ul>
             </nav>
@@ -177,4 +179,5 @@
         </div>
     </div>
 
-<?php endif; endif; ?>
+<?php endif;
+                endif; ?>

@@ -52,6 +52,7 @@ class ProdutoController
     private static function gerarProdutos()
     {        
         $todosProdutos = produto::selecioneTodos();
+        if(count($todosProdutos) > 0){
         $totalPaginas = (int)ceil(count($todosProdutos) / self::porPagina);
         $pagina = (int)self::getPaginaAtual();
         $inicio = $pagina - 1;
@@ -71,6 +72,8 @@ class ProdutoController
         }
 
         return (object) ['totalPaginas' => $totalPaginas, 'todosProdutos' => $todosProdutos];
+    }
+    return false;
     }
     private static function gerarBuscaSQL(): string | false
     {
@@ -128,9 +131,11 @@ class ProdutoController
     }
     public static function todosProdutos()
     {
-
+        
         $paginacao = self::gerarProdutos();
-
+        if($paginacao == false){
+            self::renderView('produtos');
+        }
         if (isset($_SESSION['error'][0]['bancoDadosError']))
             self::renderView('produtos', [
                 'bancoErro' => $_SESSION['error'][0]['bancoDadosError'],
@@ -166,7 +171,7 @@ class ProdutoController
         $cron = new CRON();
         $cron = $cron->selecione();
         if (isset($_SESSION['error'][0]['bancoDadosError']))
-            self::renderView('produtos', [
+            self::renderView('produto', [
                 'bancoErro' => $_SESSION['error'][0]['bancoDadosError'],
 
             ]);

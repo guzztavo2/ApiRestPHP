@@ -155,19 +155,16 @@ class routes
     public function produtos()
     {
         $this->checkFirstConnectInServer();
-
         if (gettype(self::getLocation()) === 'array') {
-            if (!isset(self::getLocation()[2]))
-                $codigoProduto = null;
-            else
-                $codigoProduto = strlen(self::getLocation()[2]) > 0 ? (string) self::getLocation()[2] : null;
+            if (isset(self::getLocation()[2]))
+            $codigoProduto = strlen(self::getLocation()[2]) > 0 ? (string) self::getLocation()[2] : null;
         } else
             $codigoProduto = null;
 
 
         switch ($this->requestMethod) {
             case 'GET':
-                if (!isset($codigoProduto)) {
+                if (!isset($codigoProduto) || $codigoProduto === null) {
                     ProdutoController::todosProdutos();
                 } else {
                     ProdutoController::visualizarPaginaProduto($codigoProduto);
