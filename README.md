@@ -20,10 +20,11 @@ São arquivos gigantes, mas foi deixado claro no desafio que será necessário a
 Depois disso, foi proporcionado um JSON para ser utilizado como MODELO desses arquivos. Exemplo: os arquivos originalmente baixados do site, possuem 200 propriedades de modelo, mas foi dito que precisaríamos de apenas 10 e que acrescentaria mais 2 propriedades novas. (E que já foi separado nesse modelo JSON).
 
 ### Roteamento funcionará da seguinte forma:
-- GET [/] - Mostra o status da API, desde a conexão com o banco, até a ultima vez que foi sincronizados com o site. 
-- PUT [/Produto]{id} - Atualizar o determinado produto identificado pelo ID;
-- DELETE [/Produto]{id} - Não excluirá o produto, mas mudará seu status no banco.
-- GET [/Produto] - Mostrará todos os produtos instalados no banco de dados.
+- GET [/] - Mostra o status da API, desde a conexão com o banco, até a ultima vez que foi sincronizados com o site;
+- PUT [/Produtos]/{id} - Atualizar o determinado produto identificado pelo ID;
+- DELETE [/Produtos]/{id} - Não excluirá o produto, mas mudará seu status no banco;
+- GET [/Produtos]/{id} - Visualizar um unico arquivo através da coluna 'code';
+- GET [/Produtos] - Mostrará todos os produtos instalados no banco de dados.
 
 
 
@@ -32,10 +33,29 @@ Depois disso, foi proporcionado um JSON para ser utilizado como MODELO desses ar
 Pronto, já poderá rodar o projeto 😉
 Também é necessário ter instalado um servidor local com PHP e o banco de dados MySQL. (Xampp por exemplo);
 
+## Sistema CRON
 
-## O que foi feito até agora?
+Para melhor funcionamento e sincronia do servidor, elaborei uma função que recria um XML, na pasta raiz chamada 'sistemaCRON-Windows' (Apenas Windows, por isso o nome).
+Para melhor funcionamento tente assim:
+- Acesse o Prompt de Comando do Windows
+- Digite esse código: taskschd.msc
+- Abrirá o agendador de tarefas do Windows, lá você importará esse arquivo XML da pasta 'sistemaCRON-Windows'.
+
+### O que esse arquivo XML faz?
+
+Sempre que for 4:00 AM, ele acessará automaticamente uma URL disponível APENAS nesse horário (Não é possivel acessar em outro horário), onde ele apenas de ter acessado, começará a sincronia do servidor.
+
+# NÃO é necessário fazer TODO esse PROCESSO.
+
+Como eu fiz esse projeto para estudos, não é necessário fazer todo essa ideia de sincronia, basta clicar em 'Executar agora' na Home Page, e nisso já bastará. 
+(Cuidado, quando esse processo ta em execução, o site fica completamente limitado, teste por si mesmo).
+
+## O que esse projeto possui?
 - ✅ Modelo feita encima de um modelo JSON (de forma automática);
 - ✅ Tabela do banco de dados foi desenvolvida encima da Model;
 - ✅ Determinei uma classe chamada 'Files', para baixar os arquivos do link1 e do link2, e extrai-los, acoplar no Modelo determinado (com as propriedades determinadas), salva no banco de dados e já deleta todos os arquivos inutilizados. 
 - ✅ Roteamento (GET, PUT E DELETE). 
 - ✅ Views (Home, Sobre, Produtos).
+
+
+
