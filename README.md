@@ -49,7 +49,7 @@ Para melhor funcionamento tente assim:
 ### O que esse arquivo XML faz?
 Sempre que for 4:00 AM, ele acessará automaticamente uma URL disponível APENAS nesse horário (Não é possivel acessar em outro horário), onde ele apenas de ter acessado, começará a sincronia do servidor.
 
-# NÃO é necessário fazer TODO esse PROCESSO.
+### NÃO é necessário fazer TODO esse PROCESSO.
 
 Como eu fiz esse projeto para estudos, não é necessário fazer todo essa ideia de sincronia, basta clicar em 'Executar agora' na Home Page, e nisso já bastará. 
 (Cuidado, quando esse processo ta em execução, o site fica completamente limitado, teste por si mesmo).
