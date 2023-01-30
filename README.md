@@ -60,8 +60,10 @@ Como eu fiz esse projeto para estudos, não é necessário fazer todo essa ideia
 
 ### Imagens do projeto em funcionamento:
 <p align="center">
+
 ![](https://github.com/guzztavo2/ApiRestPHP/blob/master/ImagensFuncionamento/home.PNG)
 ![](https://github.com/guzztavo2/ApiRestPHP/blob/master/ImagensFuncionamento/produtos.PNG)
 ![](https://github.com/guzztavo2/ApiRestPHP/blob/master/ImagensFuncionamento/sobre.PNG)
+
 </p>
 
