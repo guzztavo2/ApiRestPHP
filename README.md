@@ -38,4 +38,4 @@ Também é necessário ter instalado um servidor local com PHP e o banco de dado
 - ✅ Tabela do banco de dados foi desenvolvida encima da Model;
 - ✅ Determinei uma classe chamada 'Files', para baixar os arquivos do link1 e do link2, e extrai-los, acoplar no Modelo determinado (com as propriedades determinadas), salva no banco de dados e já deleta todos os arquivos inutilizados. 
 - ✅ Roteamento (GET, PUT E DELETE). 
-- ❎ Ainda não foi desenvolvido as views para o projeto.
+- ✅ Views (Home, Sobre, Produtos).

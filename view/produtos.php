@@ -20,7 +20,7 @@
 
         <div class="buscar row col-6 mx-auto">
             <form method="get">
-                <input type="text" class="form-control col-12 p-3 mt-2 shadow" name="buscar" placeholder="buscar por nome" id="">
+                <input type="text" class="form-control col-12 p-3 mt-2 shadow" name="buscar" placeholder="buscar qualquer valor" id="">
             </form>
 
         </div>

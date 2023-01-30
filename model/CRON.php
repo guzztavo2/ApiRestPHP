@@ -119,7 +119,7 @@ class CRON
         $xml = '<Task xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task" version="1.2">
         <RegistrationInfo>
         <Date>2023-01-23T11:59:17.3801063</Date>
-        <Author>Laptop-user256</Author>
+        <Author>'.sha1('Produtos').'</Author>
         <Description>Tarefa criada para atualizar o banco de dados, no melhor horario, do servidor de Produtos.</Description>
         <URI>\sincronizarServidorPHP</URI>
         </RegistrationInfo>
@@ -134,7 +134,7 @@ class CRON
         </Triggers>
         <Principals>
         <Principal id="Author">
-        <UserId>S-1-5-21-91566599-1036412710-562258968-1001</UserId>
+        <UserId>'.sha1('Produtos').'</UserId>
         <LogonType>InteractiveToken</LogonType>
         <RunLevel>LeastPrivilege</RunLevel>
         </Principal>

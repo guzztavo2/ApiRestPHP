@@ -2,7 +2,6 @@
 
 namespace classe;
 
-use FFI\Exception;
 use model\produto;
 
 class files

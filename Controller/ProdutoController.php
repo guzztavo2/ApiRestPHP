@@ -116,10 +116,8 @@ class ProdutoController
        if(count($arrayUpdates) === 0 || count($arrayUpdates) > count($keys))
        exit('A requisição está em formato incorreto.');
 
-       $arrayUpdates = array_values($arrayUpdates);
-       
-       //$arrayUpdates = json_decode(file_get_contents("php://input"), true);
-       $resultadoUpdate = [];
+       $arrayUpdates = array_values($arrayUpdates);       
+
        for($n = 0; $n < count($arrayUpdates); $n++){
         if(strlen($arrayUpdates[$n]) > 0)
             $produto->{$keys[$n]} = $arrayUpdates[$n];
@@ -128,6 +126,15 @@ class ProdutoController
     
       $produto->salvar($produtoAntigo->{'code'});
       exit('Produto atualizado com sucesso!');
+    }
+    public static function deletarProduto($codigoProduto){
+        $produtoAntigo = produto::find(['WHERE `code` = ?', [$codigoProduto]]);
+        $produtoAntigo = $produtoAntigo[0];
+        $produto = clone $produtoAntigo;    
+
+        $produto->setStatus(produto::TRASH);
+        $produto->salvar($produtoAntigo->{'code'});
+        exit('Produto atualizado com sucesso!');
     }
     public static function todosProdutos()
     {

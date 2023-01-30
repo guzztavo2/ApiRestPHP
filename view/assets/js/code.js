@@ -3,18 +3,8 @@ window.onload = function () {
     console.log(window.location.href.split('/'));
     if (window.location.href.split('/')[3] === HOME_PATH.split('/')[3] && window.location.href.split('/')[4] !== 'produtos')
         new main();
-    else if(window.location.href.split('/')[3] === HOME_PATH.split('/')[3] && window.location.href.split('/')[4] === 'produtos'){
-    
-    }
-
 
 }
-
-
-
-
-
-
 class main {
 
     constructor() {
@@ -67,9 +57,6 @@ class main {
             }
         }
     }
-
-
-
     buttonsEventsOnload() {
         btnExecuteCRON();
         function btnExecuteCRON() {
@@ -107,12 +94,4 @@ class main {
             }
         }
     }
-
-
-
-
-
 }
-
-
-

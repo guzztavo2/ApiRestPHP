@@ -12,7 +12,7 @@ class routes
     const HOME_URL = HOME_URL;
     const REQUESTS = ['GET', 'PUT', 'DELETE'];
     const listOFGETREQUEST = ['buscar', 'pagina'];
-    const ROTAS = ['home', 'produtos', 'sobre', 'css', 'js'];
+    const ROTAS = ['home', 'produtos', 'sobre', 'css', 'js', 'CronUpdateWindowsTask'];
     private $requestMethod;
     public function __construct()
     {
@@ -22,9 +22,8 @@ class routes
 
     private function validarRotas()
     {
+
         $localAtual = self::getLocation();
-
-
         switch ($localAtual[0]) {
 
             case 'home':
@@ -35,30 +34,32 @@ class routes
             case 'sobre':
 
                 $this->sobre();
-            break;
+                break;
+            case 'CronUpdateWindowsTask':
+                $this->CronUpdateWindowsTask();
+                break;
             case 'produtos':
                 if (count($localAtual) > 3)
                     self::redirect(self::HOME_URL . 'produtos');
-
+                
                 if (isset($localAtual[1]) && $localAtual[1] === 'id') {
 
                     if ($localAtual[2] === null || strlen($localAtual[2]) === 0)
                         self::redirect(self::HOME_URL . 'produtos');
-
-                } else if (isset($localAtual[1]) && strpos($localAtual[1], '?') !== false) {
+                } else if (isset($localAtual[0]) && count($_GET) > 0) {
 
                     $requestGET = $_GET;
                     $resultado = [];
-
+                    
                     foreach (array_keys($requestGET) as $request) {
                         foreach (self::listOFGETREQUEST as $_request) {
                             if ($request == $_request)
                                 $resultado[] = $request;
                         }
                     }
+               
                     if (count($resultado) !== count($requestGET))
                         self::redirect(self::HOME_URL . 'produtos');
-
                 }
                 $this->produtos();
                 break;
@@ -134,6 +135,8 @@ class routes
     }
     public function CronUpdateWindowsTask()
     {
+        $this->checkFirstConnectInServer();
+
         $datetime = new \DateTime('now');
         $datetime = $datetime->format('h');
 
@@ -157,11 +160,11 @@ class routes
         $this->checkFirstConnectInServer();
         if (gettype(self::getLocation()) === 'array') {
             if (isset(self::getLocation()[2]))
-            $codigoProduto = strlen(self::getLocation()[2]) > 0 ? (string) self::getLocation()[2] : null;
+                $codigoProduto = strlen(self::getLocation()[2]) > 0 ? (string) self::getLocation()[2] : null;
         } else
             $codigoProduto = null;
 
-
+      
         switch ($this->requestMethod) {
             case 'GET':
                 if (!isset($codigoProduto) || $codigoProduto === null) {
@@ -180,7 +183,7 @@ class routes
                 if ($codigoProduto === null)
                     throw new \InvalidArgumentException('É necessário fornecer o código do produto para ser deletado.');
                 else
-                    exit('Deletar o produto de id:' . $codigoProduto);
+                    ProdutoController::deletarProduto($codigoProduto);
                 break;
             default:
                 throw new \UnexpectedValueException('O tipo de método:' . $this->requestMethod . '. Não é valido aqui.');
@@ -210,6 +213,13 @@ class routes
         $url = explode('/', $url);
         array_shift($url);
         array_shift($url);
+        $getPOS = strpos($url[0], '?');
+        if ($getPOS !== false){
+            $urlModificada = explode('?', $url[0]);
+            $url[0] = $urlModificada[0];
+        }
+      
+
         foreach (self::ROTAS as $rota) {
             if ($url[0] == $rota) {
                 self::$url = $url;
