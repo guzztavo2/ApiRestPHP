@@ -58,4 +58,10 @@ Como eu fiz esse projeto para estudos, não é necessário fazer todo essa ideia
 - ✅ Views (Home, Sobre, Produtos).
 
 
+### Imagens do projeto em funcionamento:
+
+![](https://github.com/guzztavo2/ApiRestPHP/blob/master/ImagensFuncionamento/home.PNG)
+![](https://github.com/guzztavo2/ApiRestPHP/blob/master/ImagensFuncionamento/produtos.PNG)
+![](https://github.com/guzztavo2/ApiRestPHP/blob/master/ImagensFuncionamento/sobre.PNG)
+
 
