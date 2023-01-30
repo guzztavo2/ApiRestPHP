@@ -29,22 +29,22 @@ use classe\routes;
     <div class="col-4 text-bg-primary">
       <h1 class="display-6 fs-4 text-center d-flex align-items-center justify-content-center p-3" style="text-transform:lowercase">Bem vindo ao painel de configurações da API Rest</h1>
     </div>
-    <div class="col-6"></div>
-    <ul class="nav nav-pills col-2">
+    <div class="col-5"></div>
+    <ul class="nav nav-pills col-3 row">
       <?php if(classe\routes::getLocation()[0] === 'home'): ?>
-        <li class="nav-item col-4 text-center"><a href="<?php echo classe\routes::HOME_URL ?>" class="nav-link active" aria-current="page">Home</a></li>
-        <li class="nav-item col-4 text-center"><a href="<?php echo classe\routes::HOME_URL ?>produtos" class="nav-link">Produtos</a></li>
-        <li class="nav-item col-4 text-center"><a href="<?php echo classe\routes::HOME_URL ?>sobre" class="nav-link">Sobre</a></li>
+        <li class="nav-item p-2 col-lg-4 col-md-7 col-sm-12 text-center"><a href="<?php echo classe\routes::HOME_URL ?>" class="nav-link active" aria-current="page">Home</a></li>
+        <li class="nav-item p-2 col-lg-4 col-md-7 col-sm-12 text-center"><a href="<?php echo classe\routes::HOME_URL ?>produtos" class="nav-link">Produtos</a></li>
+        <li class="nav-item p-2 col-lg-4 col-md-7 col-sm-12 text-center"><a href="<?php echo classe\routes::HOME_URL ?>sobre" class="nav-link">Sobre</a></li>
 
         <?php elseif(classe\routes::getLocation()[0] === 'produtos'): ?>
-        <li class="nav-item col-4 text-center"><a href="<?php echo classe\routes::HOME_URL ?>" class="nav-link" aria-current="page">Home</a></li>
-        <li class="nav-item col-4 text-center"><a href="<?php echo classe\routes::HOME_URL ?>produtos" class="nav-link active">Produtos</a></li>
-        <li class="nav-item col-4 text-center"><a href="<?php echo classe\routes::HOME_URL ?>sobre" class="nav-link">Sobre</a></li>
+          <li class="nav-item p-2 col-lg-4 col-md-7 col-sm-12 text-center"><a href="<?php echo classe\routes::HOME_URL ?>" class="nav-link " aria-current="page">Home</a></li>
+        <li class="nav-item p-2 col-lg-4 col-md-7 col-sm-12 text-center"><a href="<?php echo classe\routes::HOME_URL ?>produtos" class="nav-link active">Produtos</a></li>
+        <li class="nav-item p-2 col-lg-4 col-md-7 col-sm-12 text-center"><a href="<?php echo classe\routes::HOME_URL ?>sobre" class="nav-link">Sobre</a></li>
 
           <?php elseif(classe\routes::getLocation()[0] === 'sobre'): ?>
-            <li class="nav-item col-4 text-center"><a href="<?php echo classe\routes::HOME_URL ?>" class="nav-link" aria-current="page">Home</a></li>
-        <li class="nav-item col-4 text-center"><a href="<?php echo classe\routes::HOME_URL ?>produtos" class="nav-link">Produtos</a></li>
-        <li class="nav-item col-4 text-center"><a href="<?php echo classe\routes::HOME_URL ?>sobre" class="nav-link active">Sobre</a></li>
+            <li class="nav-item p-2 col-lg-4 col-md-7 col-sm-12 text-center"><a href="<?php echo classe\routes::HOME_URL ?>" class="nav-link " aria-current="page">Home</a></li>
+        <li class="nav-item p-2 col-lg-4 col-md-7 col-sm-12 text-center"><a href="<?php echo classe\routes::HOME_URL ?>produtos" class="nav-link ">Produtos</a></li>
+        <li class="nav-item p-2 col-lg-4 col-md-7 col-sm-12 text-center"><a href="<?php echo classe\routes::HOME_URL ?>sobre" class="nav-link active">Sobre</a></li>
 
           <?php endif; ?>
     </ul>
