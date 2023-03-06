@@ -91,16 +91,15 @@
 
 <h2>Sistema CRON</h2>
 
-<p>Com o objetivo de otimizar o funcionamento e a sincronia do servidor, foi desenvolvido o Sistema CRON. Essa funcionalidade recria um arquivo XML na pasta raiz, denominada 'sistemaCRON-Windows', exclusivamente para sistemas operacionais Windows.</p>
+<p>Com o intuito de aprimorar o desempenho e a coordenação do servidor, foi criado o Sistema CRON. Essa funcionalidade gera um arquivo XML na pasta raiz denominada 'sistemaCRON-Windows', exclusivamente para sistemas operacionais Windows.
 
-<p>Para utilizar o Sistema CRON, acesse o Prompt de Comando do Windows e digite o código 'taskschd.msc'. Isso abrirá o agendador de tarefas do Windows, onde o arquivo XML poderá ser importado a partir da pasta 'sistemaCRON-Windows'.</p>
+Para empregar o Sistema CRON, é necessário acessar o Prompt de Comando do Windows e inserir o código 'taskschd.msc'. Isso abrirá o agendador de tarefas do Windows, onde o arquivo XML poderá ser importado da pasta 'sistemaCRON-Windows'.
 
-<p>O arquivo XML configurado pelo Sistema CRON é programado para acessar uma URL específica, disponível SOMENTE às 4:00 AM, e, após o acesso, iniciar automaticamente a sincronização do servidor.</p>
+O arquivo XML elaborado pelo Sistema CRON é programado para acessar uma URL específica, disponível somente às 4:00 AM, e, após o acesso, iniciar automaticamente a sincronização do servidor.
 
-<small>Vale ressaltar que a url e todas as outras configurações, são resultados do arquivo 'config.php'.</small>
+Importante mencionar que a URL e todas as outras configurações são geradas pelo arquivo 'config.php'.
 
-
-<p>Porém, é importante ressaltar que a sincronização não é obrigatória. Este projeto foi desenvolvido para fins de estudo, portanto, basta clicar em 'Executar agora' na Home Page para sincronizar o servidor. No entanto, é importante ter em mente que, durante o processo de sincronização, o site ficará completamente limitado. Recomenda-se testar a funcionalidade por conta própria.</p>
+No entanto, é relevante destacar que a sincronização não é compulsória. Esse projeto foi concebido para fins de estudo, portanto, basta clicar em 'Executar agora' na Home Page para sincronizar o servidor. Entretanto, é necessário ter em mente que, durante o processo de sincronização, o site ficará completamente indisponível. É recomendável testar a funcionalidade por conta própria.</p>
 
 ### Imagens do projeto em funcionamento:
 
